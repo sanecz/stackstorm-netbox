@@ -36,14 +36,6 @@ class NetboxBaseAction(Action):
             kwargs["id__in"] = ",".join(kwargs["id__in"])
             self.logger.debug("id__in transformed to {}".format(kwargs["id__in"]))
 
-        # transform `tags` if present
-        if kwargs.get("tags"):
-            if http_action in ['post', 'put', 'patch']:
-                kwargs["tags"] = [{"slug": x} for x in kwargs["tags"]]
-            else:
-                kwargs["tags"] = ",".join(kwargs["tags"])
-            self.logger.debug("tags transformed to {}".format(kwargs["tags"]))
-
         # strip values which have a None value if we are making a write request
         if http_action != "get":
             kwargs = {key: value for key, value in kwargs.items() if value is not None}
